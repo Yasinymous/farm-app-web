@@ -1378,7 +1378,7 @@ only screen and (min-resolution:192dpi) {
 	-ms-flex-pack: center;
 	justify-content: center;
 	position: relative;
-	cursor: pointer
+	cursor: pointer;
 }
 
 .vti__dropdown.show {
@@ -1411,7 +1411,6 @@ only screen and (min-resolution:192dpi) {
 }
 
 .vti__dropdown-list {
-	z-index: 1;
 	padding: 0;
 	margin: 0;
 	text-align: left;
@@ -1463,5 +1462,6 @@ only screen and (min-resolution:192dpi) {
 	width: 100%;
     border-radius: 0.5rem;
 	padding-left: 7px;
-    background-color: '#F3F4F6';
+	background-color: #F3F4F6;
+	background: #F3F4F6;
 }

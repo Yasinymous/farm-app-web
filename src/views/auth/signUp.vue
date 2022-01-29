@@ -1,8 +1,9 @@
 <template>
   <Message ref="msgBox" />
-  <div class="max-w-md w-full space-y-8 p-10 rounded-xl z-10">
+  <AddressModal ref="address" @change="setPlace" />
+  <div class="w-full space-y-8 p-10 rounded-xl z-10">
     <div class="flex flex-col">
-      <div class="flex flex-col sm:flex-row items-center">
+      <div class="flex items-center">
         <h2 class="font-bold text-black text-2xl">Sign up to EasyAnimal</h2>
       </div>
       <form @submit.prevent="submit()">
@@ -95,31 +96,79 @@
             />
           </div>
 
-          <div class="space-y-2 w-full text-sm text-left">
-            <label class="font-bold text-black">Company Name</label>
+          <div class="space-x-2 w-full flex">
+            <div class="space-y-2 w-3/4 text-sm text-left">
+              <label class="font-bold text-black">Company Name</label>
 
-            <input
-              class="appearance-none block w-full bg-gray-100 hover:bg-white hover:border-yellow-500 text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-              required="required"
-              type="text"
-              placeholder="Company Name"
-              v-model="companyName"
-            />
+              <input
+                class="appearance-none block w-full bg-gray-100 hover:bg-white hover:border-yellow-500 text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
+                required="required"
+                type="text"
+                placeholder="Company Name"
+                v-model="companyName"
+              />
+            </div>
+            <div class="space-y-2 w-1/4 text-sm text-left">
+              <label class="font-bold text-black">Address</label>
+
+              <button
+                type="button"
+                class="flex flex-row items-center appearance-none block w-full bg-gray-300 hover:bg-gray-100 hover:border-yellow-500 text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
+                @click="addressModalOpen()"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 10 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
           <div class="text-left flex space-x-2">
             <button
               @click="stepper = 0"
+              type="button"
               class="bg-yellow-500 w-4/12 px-4 py-2 text-sm font-bold tracking-wider text-white rounded-lg hover:shadow-lg hover:bg-yellow-400"
             >
               Prev
             </button>
-            <button
-              type="submit"
-              value="Submit"
-              class="bg-green-500 w-8/12 px-4 py-2 text-sm font-bold tracking-wider text-white rounded-lg hover:shadow-lg hover:bg-green-400"
-            >
-              Sign Up
-            </button>
+
+            <AsyncButton
+              :containerClass="'bg-green-500 w-8/12 text-sm font-bold tracking-wider text-white rounded-lg hover:shadow-lg hover:bg-green-400'"
+              :loadState="load"
+              :text="'Sign Up'"
+              :loadTitle="'Sign Up'"
+              :type="'submit'"
+            />
           </div>
         </div>
       </form>
@@ -130,8 +179,23 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+//global
+import AsyncButton from "@/components/general/async.button.vue";
+// local
+import AddressModal from "./modal/address.modal.vue";
+
+declare interface Message {
+  name: string;
+  status: string;
+  message: string;
+}
+
 export default defineComponent({
   name: "auth-sign-up",
+  components: {
+    AsyncButton,
+    AddressModal,
+  },
   data() {
     return {
       stepper: 0,
@@ -140,17 +204,66 @@ export default defineComponent({
       password: "",
       repassword: "",
 
-      phone: null,
+      phone: "",
       email: "",
       type: 0,
       companyName: "",
+
+      address: "",
+      position: "",
+
+      message: new Array<Message>(),
+
+      load: false,
     };
   },
   methods: {
     submit(): void {
+      this.load = true;
       if (this.validate()) {
-        // res mail same error box
-        // res username same error box
+        // message box err message dondur
+
+        let data = {
+          name: this.name,
+          username: this.username,
+          password: this.password,
+          repassword: this.repassword,
+
+          phone: this.phone,
+          email: this.email,
+          type: this.type,
+          companyName: this.companyName,
+
+          address: this.address,
+          position: this.position,
+        };
+
+        if (!this.address || !this.position) {
+          this.message.push({
+            name: "Sign-Up-Address",
+            status: "err",
+            message: "There are spaces in the Addressform.",
+          });
+        }
+
+        this.message.push({
+          name: "Sign-Up-Email",
+          status: "err",
+          message: "There are spaces in the Email.",
+        });
+
+        this.message.push({
+          name: "Sign-Up-Username",
+          status: "err",
+          message: "There are spaces in the Username.",
+        });
+
+        setTimeout(() => {
+          this.messageBox(this.message);
+          this.load = false;
+          this.message = [];
+          console.log(data);
+        }, 1000);
       }
     },
     onInput(phone: any, phoneObject: any): void {
@@ -161,167 +274,33 @@ export default defineComponent({
     },
     validate(): boolean {
       if (!this.name || !this.username || !this.password || !this.repassword) {
-        this.stepper = 0;
-        this.messageBox("STEP1 BOSLUK", "BOSLUK");
-        return false;
+        this.message.push({
+          name: "Sign-Up-Step-1",
+          status: "err",
+          message: "There are spaces in the form.",
+        });
+      }
+      if (this.password != this.repassword) {
+        this.message.push({
+          name: "Sign-Up-Pass",
+          status: "err",
+          message: "Passwords do not match.",
+        });
       }
       return true;
     },
-    messageBox(message: string, type: string) {
-      (this.$refs.msgBox as HTMLFormElement).opened(message, type);
+    setPlace(data: any): void {
+      alert(data.position.lat);
+      alert(data.address.formatted_address);
+      this.address = data.address.formatted_address;
+      this.position = data.position;
+    },
+    messageBox(message: object) {
+      (this.$refs.msgBox as HTMLFormElement).opened(message);
+    },
+    addressModalOpen(): void {
+      (this.$refs.address as HTMLFormElement).showModal();
     },
   },
 });
 </script>
-
-<!-- <div class="mt-5">
-          <div class="form">
-            <div class="md:space-y-2 mb-3">
-              <label class="text-xs font-semibold text-gray-600 py-2"
-                >Company Logo<abbr class="hidden" title="required">*</abbr></label
-              >
-              <div class="flex items-center py-6">
-                <div class="w-12 h-12 mr-4 flex-none rounded-xl border overflow-hidden">
-                  <img
-                    class="w-12 h-12 mr-4 object-cover"
-                    src="https://images.unsplash.com/photo-1611867967135-0faab97d1530?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1352&amp;q=80"
-                    alt="Avatar Upload"
-                  />
-                </div>
-                <label class="cursor-pointer">
-                  <span
-                    class="focus:outline-none text-white text-sm py-2 px-4 rounded-full bg-green-400 hover:bg-green-500 hover:shadow-lg"
-                    >Browse</span
-                  >
-                  <input
-                    type="file"
-                    class="hidden"
-                    :multiple="multiple"
-                    :accept="accept"
-                  />
-                </label>
-              </div>
-            </div>
-            <div class="md:flex flex-row md:space-x-4 w-full text-xs">
-              <div class="mb-3 space-y-2 w-full text-xs">
-                <label class="font-semibold text-gray-600 py-2"
-                  >Company Name <abbr title="required">*</abbr></label
-                >
-                <input
-                  placeholder="Company Name"
-                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                  required="required"
-                  type="text"
-     
-           
-                />
-                <p class="text-red text-xs hidden">Please fill out this field.</p>
-              </div>
-              <div class="mb-3 space-y-2 w-full text-xs">
-                <label class="font-semibold text-gray-600 py-2"
-                  >Company Mail <abbr title="required">*</abbr></label
-                >
-                <input
-                  placeholder="Email ID"
-                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                  required="required"
-                  type="text"
-     
-           
-                />
-                <p class="text-red text-xs hidden">Please fill out this field.</p>
-              </div>
-            </div>
-            <div class="mb-3 space-y-2 w-full text-xs">
-              <label class="font-semibold text-gray-600 py-2">Company Website</label>
-              <div class="flex flex-wrap items-stretch w-full mb-4 relative">
-                <div class="flex">
-                  <span
-                    class="flex items-center leading-normal bg-grey-lighter border-1 rounded-r-none border border-r-0 border-blue-300 px-3 whitespace-no-wrap text-grey-dark text-sm w-12 h-10 bg-blue-300 justify-center items-center text-xl rounded-lg text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
-                    </svg>
-                  </span>
-                </div>
-                <input
-                  type="text"
-                  class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border border-l-0 h-10 border-grey-light rounded-lg rounded-l-none px-3 relative focus:border-blue focus:shadow"
-                  placeholder="https://"
-                />
-              </div>
-            </div>
-            <div class="md:flex md:flex-row md:space-x-4 w-full text-xs">
-              <div class="w-full flex flex-col mb-3">
-                <label class="font-semibold text-gray-600 py-2">Company Address</label>
-                <input
-                  placeholder="Address"
-                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                  type="text"
-                  name="integration[street_address]"
-                  id="integration_street_address"
-                />
-              </div>
-              <div class="w-full flex flex-col mb-3">
-                <label class="font-semibold text-gray-600 py-2"
-                  >Location<abbr title="required">*</abbr></label
-                >
-                <select
-                  class="block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4 md:w-full"
-                  required="required"
-           
-         
-                >
-                  <option value="">Seleted location</option>
-                  <option value="">Cochin,KL</option>
-                  <option value="">Mumbai,MH</option>
-                  <option value="">Bangalore,KA</option>
-                </select>
-                <p class="text-sm text-red-500 hidden mt-3" id="error">
-                  Please fill out this field.
-                </p>
-              </div>
-            </div>
-            <div class="flex-auto w-full mb-1 text-xs space-y-2">
-              <label class="font-semibold text-gray-600 py-2">Description</label>
-              <textarea
-                required=""
-                name="message"
-                id=""
-                class="w-full min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg py-4 px-4"
-                placeholder="Enter your comapny info"
-                spellcheck="false"
-              ></textarea>
-              <p class="text-xs text-gray-400 text-left my-3">
-                You inserted 0 characters
-              </p>
-            </div>
-            <p class="text-xs text-red-500 text-right my-3">
-              Required fields are marked with an asterisk
-              <abbr title="Required field">*</abbr>
-            </p>
-            <div class="mt-5 text-right md:space-x-3 md:block flex flex-col-reverse">
-              <button
-                class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                class="mb-2 md:mb-0 bg-green-400 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div> -->

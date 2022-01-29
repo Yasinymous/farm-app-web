@@ -6,9 +6,14 @@ import Auth from '../views/auth/index.vue'
 import SignIn from '../views/auth/signIn.vue'
 import SignUp from '../views/auth/signUp.vue'
 
+// Main COMPONENTS
+import Main from '../views/main/index.vue'
+import DashBoard from '../views/main/dashboard/index.vue'
+import Operation from '../views/main/operation/index.vue'
+
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: Home
   },
@@ -23,9 +28,26 @@ const routes: Array<RouteRecordRaw> = [
         component: SignIn
       },
       {
-        path: '/auth/s',
+        path: '',
         name: 'auth-sign-up',
         component: SignUp
+      },
+    ]
+  },
+  {
+    path: "/",
+    name: "main",
+    component: Main,
+    children: [
+      {
+        path: 'dashboard',
+        name: 'main-dashboard',
+        component: DashBoard
+      },
+      {
+        path: 'operation',
+        name: 'main-operation',
+        component: Operation
       },
     ]
   },

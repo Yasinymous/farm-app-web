@@ -1,13 +1,9 @@
 <template>
   <div class="flex flex-row w-full">
-    <div class="bg-yellow-500 h-screen w-4/12">
-      <!-- <img
-        class="h-full object-cover"
-        :src="'/assets/images/testImage.jpg'"
-        alt="imageTest"
-      /> -->
+    <div class="bg-yellow-500 h-screen w-0 sm:w-4/12">
+      <img class="h-full object-cover" src="@/assets/images/auth.svg" alt="auth1" />
     </div>
-    <div class="h-screen w-8/12 flex justify-center flex-wrap content-center">
+    <div class="h-screen w-full sm:w-8/12 flex justify-center flex-wrap content-center">
       <div class="absolute right-5 top-5">
         <div v-if="$route.name == 'auth-sign-in'">
           <span>Not a member? </span>
@@ -35,9 +31,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "auth-index",
   data() {
-    return {
-      taskName: "",
-    };
+    return {};
   },
   methods: {},
 });

@@ -1,8 +1,8 @@
 <template>
   <Message ref="msgBox" />
-  <div class="max-w-md w-full space-y-8 p-10 rounded-xl z-10">
+  <div class="w-full space-y-8 p-10 rounded-xl z-10">
     <div class="flex flex-col">
-      <div class="flex flex-col sm:flex-row items-center">
+      <div class="flex items-center">
         <h2 class="font-bold text-black text-2xl">Sign in to EasyAnimal</h2>
       </div>
       <form @submit.prevent="submit()" class="mt-8 space-y-6 w-96">
@@ -13,8 +13,6 @@
             required="required"
             type="text"
             v-model="username"
-            name="integration[shop_name]"
-            id="integration_shop_name"
           />
         </div>
         <div class="space-y-2 w-full text-sm text-left">
@@ -27,18 +25,16 @@
             required="required"
             type="password"
             v-model="password"
-            name="integration[shop_name]"
-            id="integration_shop_name"
           />
         </div>
         <div class="text-left flex">
-          <button
-            type="submit"
-            value="Submit"
-            class="bg-green-500 w-full px-4 py-2 text-sm font-bold tracking-wider text-white rounded-lg hover:shadow-lg hover:bg-green-400"
-          >
-            Sign In
-          </button>
+          <AsyncButton
+            :containerClass="'bg-green-500 w-full text-sm font-bold tracking-wider text-white rounded-lg hover:shadow-lg hover:bg-green-400'"
+            :loadState="load"
+            :text="'Sign In'"
+            :loadTitle="'Sign In'"
+            :type="'submit'"
+          />
         </div>
       </form>
     </div>
@@ -48,23 +44,51 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+//global
+import AsyncButton from "@/components/general/async.button.vue";
+
+declare interface Message {
+  name: string;
+  status: string;
+  message: string;
+}
+
 export default defineComponent({
   name: "auth-sign-in",
+  components: {
+    AsyncButton,
+  },
   data() {
     return {
       username: "",
       password: "",
+      message: new Array<Message>(),
+
+      load: false,
     };
   },
   methods: {
     submit(): void {
-      alert(this.username);
-      alert(this.password);
+      // boyle bir kullanici yok
+      // username veya sifre yanlis
+
+      this.message.push({
+        name: "Sign-In",
+        status: "err",
+        message:
+          "The user name you entered does not belong to an account. Please check the username and try again.",
+      });
+      this.load = true;
+      setTimeout(() => {
+        this.messageBox(this.message);
+        this.load = false;
+      }, 1000);
+
       // res mail same error box
       // res username same error box
     },
-    messageBox(message: string, type: string) {
-      (this.$refs.msgBox as HTMLFormElement).opened(message, type);
+    messageBox(message: object) {
+      (this.$refs.msgBox as HTMLFormElement).opened(message);
     },
   },
 });

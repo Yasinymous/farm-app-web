@@ -14,13 +14,14 @@ import router from './router'
 import VueTelInput from 'vue3-tel-input'
 import './assets/vueTel.css'
 
+// vue modal
+import modal from '@/components/general/modal.vue'
 // vue message Comp
 import message from '../src/components/general/message.vue';
-
+// google maps
+import VueGoogleMaps from '@fawmi/vue-google-maps'
 
 const app = createApp(App);
-
-
 
 const VueTelInputOptions = {
     mode: "international",
@@ -34,7 +35,15 @@ const VueTelInputOptions = {
 
 app.use(VueTelInput,VueTelInputOptions);
 
+app.use(VueGoogleMaps, {
+  load: {
+      key: process.env.VUE_APP_GOOGLE_MAP_API_KEY,
+      libraries: "places",
+      language: 'en',
+  },
+})
 
+app.component('modal', modal)
 
 app.component('Message',message);
 // pass the injection key
