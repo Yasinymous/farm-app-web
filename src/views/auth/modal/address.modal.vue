@@ -23,6 +23,7 @@
               <GMapMap
                 :center="center"
                 :zoom="7"
+                @click="handleClick"
                 class="appearance-none block w-full bg-gray-100 hover:bg-white hover:border-yellow-500 text-grey-darker border border-grey-lighter rounded-lg h-80"
               >
                 <GMapCluster>
@@ -80,6 +81,14 @@ export default defineComponent({
       },
       position: { lat: 41.006698052954086, lng: 28.976202403952016 },
       load: false,
+      options: {
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 3,
+        fillColor: "#FF0000",
+        fillOpacity: 0.35,
+        clickable: true,
+      },
     };
   },
   methods: {
@@ -114,6 +123,12 @@ export default defineComponent({
       }
     },
     updateCoordinates(location: any) {
+      this.position = {
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng(),
+      };
+    },
+    handleClick(location: any) {
       this.position = {
         lat: location.latLng.lat(),
         lng: location.latLng.lng(),

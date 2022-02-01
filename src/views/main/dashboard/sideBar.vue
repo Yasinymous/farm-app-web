@@ -25,8 +25,8 @@
   </div>
   <div
     v-else
-    :class="opened ? 'w-2/5' : ''"
-    class="h-screen relative flex flex-col justify-between px-8 bg-sideNavColor border-l shadow-xl"
+    :class="opened ? '' : 'relative'"
+    class="w-96 absolute right-0 lg:relative h-screen justify-between px-8 bg-white border-l shadow-xl"
   >
     <div
       @click="opened = false"
@@ -62,7 +62,7 @@ export default defineComponent({
   name: "side-bar",
   data() {
     return {
-      opened: false,
+      opened: true,
     };
   },
 });

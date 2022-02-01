@@ -10,6 +10,7 @@ import SignUp from '../views/auth/signUp.vue'
 import Main from '../views/main/index.vue'
 import DashBoard from '../views/main/dashboard/index.vue'
 import Operation from '../views/main/operation/index.vue'
+import Company from '../views/main/company/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -48,6 +49,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'operation',
         name: 'main-operation',
         component: Operation
+      },
+      {
+        path: 'company',
+        name: 'main-company',
+        component: Company
       },
     ]
   },

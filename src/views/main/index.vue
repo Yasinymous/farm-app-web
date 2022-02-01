@@ -3,7 +3,7 @@
     <div class="w-20">
       <Navbar />
     </div>
-    <div class="w-screen h-screen">
+    <div class="w-screen h-screen overflow-y-auto overflow-x-hidden">
       <router-view />
     </div>
   </div>

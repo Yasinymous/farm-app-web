@@ -56,6 +56,7 @@
           <div class="text-left flex">
             <button
               @click="stepper = 1"
+              type="button"
               class="bg-green-500 w-full px-4 py-2 text-sm font-bold tracking-wider text-white rounded-lg hover:shadow-lg hover:bg-green-400"
             >
               Next
@@ -290,8 +291,6 @@ export default defineComponent({
       return true;
     },
     setPlace(data: any): void {
-      alert(data.position.lat);
-      alert(data.address.formatted_address);
       this.address = data.address.formatted_address;
       this.position = data.position;
     },
