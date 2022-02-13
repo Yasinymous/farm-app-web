@@ -47,6 +47,22 @@
       <GMapMap
         :center="center"
         :zoom="7"
+        class="appearance-none block w-full h-full bg-gray-100 hover:bg-white hover:border-yellow-500 text-grey-darker border border-grey-lighter rounded-lg"
+      >
+        <GMapCluster>
+          <GMapMarker
+            :position="{
+              lat: parseFloat(position.lat),
+              lng: parseFloat(position.lng),
+            }"
+            @click="center = position"
+            :draggable="true"
+          />
+        </GMapCluster>
+      </GMapMap>
+      <!-- <GMapMap
+        :center="center"
+        :zoom="7"
         @click="handleClick"
         class="appearance-none block w-full h-full bg-gray-100 hover:bg-white hover:border-yellow-500 text-grey-darker border border-grey-lighter rounded-lg"
       >
@@ -61,7 +77,7 @@
             @drag="updateCoordinates"
           />
         </GMapCluster>
-      </GMapMap>
+      </GMapMap> -->
     </div>
   </div>
 </template>

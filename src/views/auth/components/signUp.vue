@@ -183,7 +183,7 @@ import { defineComponent } from "vue";
 //global
 import AsyncButton from "@/components/general/async.button.vue";
 // local
-import AddressModal from "./modal/address.modal.vue";
+import AddressModal from "../modal/address.modal.vue";
 
 declare interface Message {
   name: string;

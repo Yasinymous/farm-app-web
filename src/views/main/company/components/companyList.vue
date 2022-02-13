@@ -2,10 +2,10 @@
   <div
     :class="
       this.$parent.opened
-        ? 'md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 sm:grid-cols-1'
-        : 'lg:grid-cols-3 xl:grid-cols-3 sm:grid-cols-2'
+        ? 'md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 sm:grid-cols-1 '
+        : 'lg:grid-cols-3 xl:grid-cols-3 sm:grid-cols-2 '
     "
-    class="grid gap-10 overflow-y-auto overflow-x-hidden"
+    class="grid gap-10 overflow-y-auto overflow-x-hidden pr-3"
   >
     <div
       v-for="i in 10"

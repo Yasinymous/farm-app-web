@@ -3,8 +3,13 @@ import Home from '../views/Home.vue'
 
 // AUTH COMPONENTS
 import Auth from '../views/auth/index.vue'
-import SignIn from '../views/auth/signIn.vue'
-import SignUp from '../views/auth/signUp.vue'
+import SignIn from '../views/auth/components/signIn.vue'
+import SignUp from '../views/auth/components/signUp.vue'
+
+// AUTH COMPONENTS
+import Account from '../views/main/account/index.vue'
+import Profile from '../views/main/account/components/profile.vue'
+import Settings from '../views/main/account/components/settings.vue'
 
 // Main COMPONENTS
 import Main from '../views/main/index.vue'
@@ -35,6 +40,7 @@ const routes: Array<RouteRecordRaw> = [
       },
     ]
   },
+
   {
     path: "/",
     name: "main",
@@ -54,6 +60,23 @@ const routes: Array<RouteRecordRaw> = [
         path: 'company',
         name: 'main-company',
         component: Company
+      },
+      {
+        path: "account",
+        name: "main-account",
+        component: Account,
+        children: [
+          {
+            path: '',
+            name: 'account-profile',
+            component: Profile
+          },
+          {
+            path: 'settings',
+            name: 'account-settings',
+            component: Settings
+          },
+        ]
       },
     ]
   },
