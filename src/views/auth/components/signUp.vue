@@ -1,5 +1,4 @@
 <template>
-  <Message ref="msgBox" />
   <AddressModal ref="address" @change="setPlace" />
   <div class="w-full space-y-8 p-10 rounded-xl z-10">
     <div class="flex flex-col">
@@ -179,7 +178,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
 //global
 import AsyncButton from "@/components/general/async.button.vue";
 // local

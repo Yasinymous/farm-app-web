@@ -1,14 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import Vue from 'vue'
-
-// import store from './store';
 
 // css
 import './assets/tailwind.css'
 
 // router
 import router from './router'
+import { store, key } from "./store/store";
 
 // vue phone packpage
 import VueTelInput from 'vue3-tel-input'
@@ -21,7 +19,9 @@ import message from '../src/components/general/message.vue';
 // google maps
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 
+
 const app = createApp(App);
+
 
 const VueTelInputOptions = {
     mode: "international",
@@ -31,7 +31,7 @@ const VueTelInputOptions = {
         required: true,
         maxlength: 20,
       },
-  }
+}
 
 app.use(VueTelInput,VueTelInputOptions);
 
@@ -47,7 +47,7 @@ app.component('modal', modal)
 
 app.component('Message',message);
 // pass the injection key
-// app.use(store);
+
 // // app.use(Vuex);
 
 
@@ -56,4 +56,3 @@ app.component('Message',message);
 app.use(router);
 
 app.mount('#app')
-

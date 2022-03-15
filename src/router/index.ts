@@ -14,6 +14,7 @@ import Settings from '../views/main/account/components/settings.vue'
 // Main COMPONENTS
 import Main from '../views/main/index.vue'
 import DashBoard from '../views/main/dashboard/index.vue'
+import Animal from '../views/main/animal/index.vue'
 import Operation from '../views/main/operation/index.vue'
 import Company from '../views/main/company/index.vue'
 
@@ -50,6 +51,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'dashboard',
         name: 'main-dashboard',
         component: DashBoard
+      },
+      {
+        path: 'animal',
+        name: 'main-animal',
+        component: Animal
       },
       {
         path: 'operation',
